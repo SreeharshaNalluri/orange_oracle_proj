@@ -1,0 +1,13 @@
+@import "tailwindcss/tailwind.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  @apply bg-background min-h-screen !important;
+}
+
+#root, #__next {
+  @apply min-h-screen;
+}
