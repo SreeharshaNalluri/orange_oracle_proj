@@ -14,15 +14,15 @@ import "dotenv/config";
 
 import { formatConvHistory } from "../utils/formatConvHistory";
 
-const standaloneQuestionTemplate = `Given some conversation history (if any) and a question, convert the question to a standalone question. 
+const standaloneQuestionTemplate = `Given some conversation history (if any) and a question, convert the question to a standalone question.
 conversation history: {conv_history}
-question: {question} 
+question: {question}
 standalone question:`;
 const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
   standaloneQuestionTemplate
 );
 
-const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question about question based on the context provided and the conversation history. Try to find the answer in the context. If the answer is not given in the context, find the answer in the conversation history if possible. If you really don't know the answer, say "I'm sorry, I don't know the answer to that." . Don't try to make up an answer. Always speak as if you were chatting to a friend. 
+const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question about question based on the context provided and the conversation history. Try to find the answer in the context. If the answer is not given in the context, find the answer in the conversation history if possible. If you really don't know the answer, say "I'm sorry, I don't know the answer to that." . Don't try to make up an answer. Always speak as if you were chatting to a friend.
 context: {context}
 conversation history: {conv_history}
 question: {question}
@@ -34,14 +34,14 @@ export default function Chatbot() {
     { type: string; message: string }[]
   >([]);
   const [userInput, setUserInput] = useState("");
-  const [streamingMessage, setStreamingMessage] = useState(""); 
+  const [streamingMessage, setStreamingMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const question = userInput;
     setUserInput("");
-    setStreamingMessage("")
-    setConvHistory(prev => [...prev, { type: "User", message: question }]);
+    setStreamingMessage("");
+    setConvHistory((prev) => [...prev, { type: "User", message: question }]);
     const llm = new ChatOpenAI({
       openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY!,
       maxTokens: 1500,
@@ -81,14 +81,19 @@ export default function Chatbot() {
       let fullResponse = "";
       for await (const chunk of await chain.stream({
         question: question,
-        conv_history: formatConvHistory(convHistory.map((item) => item.message)),
+        conv_history: formatConvHistory(
+          convHistory.map((item) => item.message)
+        ),
       })) {
         fullResponse += chunk;
         setStreamingMessage(fullResponse);
       }
-  
+
       // After streaming is complete, add the full response to conversation history
-      setConvHistory(prev => [...prev, { type: "AI", message: fullResponse }]);
+      setConvHistory((prev) => [
+        ...prev,
+        { type: "AI", message: fullResponse },
+      ]);
       setStreamingMessage(""); // Clear streaming message
     } catch (error) {
       console.error("Error during streaming:", error);
@@ -97,45 +102,51 @@ export default function Chatbot() {
   };
 
   return (
-    <section className="chatbot-container flex h-screen">
-      <div className="chatbot-history w-1/2 p-4 border-r overflow-y-auto">
-        {convHistory.map((message, index) => (
-          <p
-            key={index}
-            className={`chatbot-message mb-2 ${
-              message.type === "User" ? "text-blue-500" : "text-green-500"
-            }`}
-          >
-            {message.type}: {message.message}
-          </p>
-        ))}
-        {/* Show streaming message if available */}
-        {streamingMessage && (
-          <p className="chatbot-message mb-2 text-green-500">
-            AI: {streamingMessage}
-          </p>
-        )}
+    <section className="glass-panel flex h-[calc(100vh-12rem)] max-w-6xl mx-auto overflow-hidden">
+      <div className="w-1/2 p-4 border-r border-white/10 overflow-y-auto">
+        <div className="space-y-4">
+          {convHistory.map((message, index) => (
+            <div
+              key={index}
+              className={`p-4 rounded-lg transition-all duration-300 ${
+                message.type === "User"
+                  ? "bg-[var(--surface)] ml-auto max-w-[80%]"
+                  : "bg-[var(--accent)]/10 max-w-[80%]"
+              }`}
+            >
+              <p
+                className={`${
+                  message.type === "User"
+                    ? "text-[var(--foreground)]"
+                    : "text-[var(--accent)]"
+                }`}
+              >
+                {message.message}
+              </p>
+            </div>
+          ))}
+          {streamingMessage && (
+            <div className="bg-[var(--accent)]/10 p-4 rounded-lg">
+              <p className="text-[var(--accent)]">
+                {streamingMessage}
+                <span className="animate-pulse">▋</span>
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="chatbot-main w-1/2 p-4 flex flex-col">
-        <form
-          id="form"
-          className="chatbot-input-container flex-grow flex flex-col"
-          onSubmit={handleSubmit}
-        >
+
+      <div className="w-1/2 p-4 flex flex-col">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <textarea
-            name="user-input"
-            id="user-input"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            className="w-full p-4 text-lg border rounded-md mb-4 h-32"
+            className="input-primary flex-grow mb-4 resize-none"
+            placeholder="Type your message..."
             required
           />
-          <button
-            id="submit-btn"
-            type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Send
+          <button type="submit" className="btn-primary">
+            Send Message
           </button>
         </form>
       </div>
