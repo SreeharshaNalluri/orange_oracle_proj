@@ -19,3 +19,20 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+@layer components {
+  .glass-panel {
+    @apply bg-[var(--surface)] backdrop-blur-lg bg-opacity-80 border border-white/10 rounded-lg;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-[var(--accent)] text-white rounded-md
+    transition-all duration-300 shadow-lg;
+    @apply hover:bg-opacity-80 hover:shadow-[0_0_15px_rgba(0,145,255,0.25)];
+  }
+
+  .input-primary {
+    @apply bg-[var(--surface)] border border-white/10 rounded-md px-4 py-2
+    focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]
+    transition-all duration-300;
+  }
+}
