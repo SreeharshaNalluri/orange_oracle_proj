@@ -27,27 +27,25 @@ export default function Home() {
         </nav>
         
         <div className="glass-panel p-8 max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[var(--accent)] 
-            to-purple-500 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold mb-6 text-center text-white">
             Knowledge Base Submission
           </h1>
           <div className="space-y-4">
-            <ul className="space-y-4 text-[var(--text-secondary)]">
-              <li className="flex items-start space-x-2">
-                <span className="text-[var(--accent)]">•</span>
-                <span>Hello and welcome to our context-aware chatbot!</span>
-              </li>
-              <li>
-                For the best experience, we recommend starting fresh by deleting the
-                existing knowledge base. This ensures that the chatbot can provide
-                accurate and customized responses tailored to your needs.
-              </li>
-              <li>
-                Once the knowledge base is cleared, you can submit a new one with
-                your company’s custom information, including services, FAQs, or any
-                other relevant data. This helps the chatbot understand your unique
-                requirements and offer personalized assistance.
-              </li>
+            <ul className="space-y-4 text-[var(--text-secondary)] list-disc pl-6">
+            <li>
+              Hello and welcome to our context-aware chatbot!
+            </li>
+            <li>
+              For the best experience, we recommend starting fresh by deleting the
+              existing knowledge base. This ensures that the chatbot can provide
+              accurate and customized responses tailored to your needs.
+            </li>
+            <li>
+              Once the knowledge base is cleared, you can submit a new one with
+              your company’s custom information, including services, FAQs, or any
+              other relevant data. This helps the chatbot understand your unique
+              requirements and offer personalized assistance.
+            </li>
             </ul>
           </div>
           <ClientKnowledgeBaseForm />
