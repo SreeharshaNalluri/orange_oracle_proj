@@ -42,6 +42,7 @@ NEXT_PUBLIC_SUPABASE_API_KEY=
 NEXT_PUBLIC_SUPABASE_URL=
 # Add any other required API keys
 # Ask Dhawal for the Supabase Creds
+# NOTE: Without this project can not function.
 ```
 
 5. Start the development server:
