@@ -2,6 +2,8 @@
 
 A powerful chatbot application built with Next.js that leverages LangChain's Agent and Retrieval Augmented Generation (RAG) capabilities to provide accurate answers from your custom knowledge base.
 
+## Try the APP hosted here : https://custom-knowledge-base-rag-chatbot.vercel.app/
+
 ## Overview
 
 This project creates an AI-powered chatbot that can:
